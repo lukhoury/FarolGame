@@ -5,22 +5,29 @@ using UnityEngine;
 public class PlayerMovements : MonoBehaviour
 {
 
-    float moveSpeed = 10;
+    public float speed = 10f;
+    public float jumpForce = 100f;
+
+    private Rigidbody2D rigidbody;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        // Movimiento horizontal
+        float x = Input.GetAxis("Horizontal");
+        rigidbody.AddForce(new Vector2(x * speed, 0));
 
-        float verticalInput = Input.GetAxis("Vertical");
-
-        transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * moveSpeed * Time.deltaTime);
+        // Salto
+        if (Input.GetButtonDown("Jump"))
+        {
+            rigidbody.AddForce(new Vector2(0, jumpForce));
+        }
 
     }
 }
