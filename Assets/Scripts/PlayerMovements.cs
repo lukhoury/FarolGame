@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour
 {
-    public float speed = 10f;
-    public float speedJump = 500f;
+
+    float moveSpeed = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -16,27 +16,11 @@ public class PlayerMovements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontalMovement = 0f;
+        float horizontalInput = Input.GetAxis("Horizontal");
 
-        // Horizontal Movement
-        if (Input.GetKey("a")) {
-            horizontalMovement -= speed;
-        }
+        float verticalInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey("d")) {
-            horizontalMovement += speed;
-        }
+        transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * moveSpeed * Time.deltaTime);
 
-        this.transform.Translate(horizontalMovement * Time.deltaTime, 0, 0);
-
-        // To crouch
-        if (Input.GetKeyDown("s")) {
-            this.transform.Translate(0, -speed * Time.deltaTime, 0);
-        }
-
-        // To jump
-        if (Input.GetKeyDown("w")) {
-            this.transform.Translate(0, speedJump * Time.deltaTime, 0);
-        }
     }
 }
