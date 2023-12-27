@@ -4,29 +4,47 @@ using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour
 {
+    public float walkSpeed = 3;
+    public float runSpeed = 6;
+    public float jumpSpeed = 6;
+    public float doubleJumpSpeed = 6;
 
-    public float speed = 10f;
-    public float jumpForce = 100f;
+    private bool canDoubleJump;
 
-    private Rigidbody2D rigidbody;
+    Rigidbody2D rb2D;
 
-    // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // Movimiento horizontal
-        float x = Input.GetAxis("Horizontal");
-        rigidbody.AddForce(new Vector2(x * speed, 0));
+    private void Update() {
+        // jump
+        if (Input.GetKey("space")) {
+            if (CheckGround.isGrounded) {
+                canDoubleJump = true;
+                rb2D.velocity = new Vector2(rb2D.velocity.x, jumpSpeed);
+            }
+            else if (Input.GetKeyDown("space")){
+                if (canDoubleJump) {
+                    rb2D.velocity = new Vector2(rb2D.velocity.x, doubleJumpSpeed);
+                    canDoubleJump = false;
+                }
+            } 
+        }
+    }
 
-        // Salto
-        if (Input.GetButtonDown("Jump"))
-        {
-            rigidbody.AddForce(new Vector2(0, jumpForce));
+    void FixedUpdate()
+    {   
+        // horizontal move
+        if (Input.GetKey("d") || Input.GetKey("right")) {
+            rb2D.velocity = new Vector2(walkSpeed, rb2D.velocity.y);
+        }
+        else if (Input.GetKey("a") || Input.GetKey("left")) {
+            rb2D.velocity = new Vector2(-walkSpeed, rb2D.velocity.y);
+        }
+        else {
+            rb2D.velocity = new Vector2(0, rb2D.velocity.y);
         }
 
     }
